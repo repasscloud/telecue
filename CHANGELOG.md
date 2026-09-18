@@ -5,7 +5,7 @@ All notable changes to TeleCue will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project uses semantic versioning.
 
-## [Unreleased]
+## [0.1.0] - 2026-09-17
 
 ### Added
 
@@ -24,4 +24,3 @@ and the project uses semantic versioning.
 ### Fixed
 
 - Copyright line break in the About panel now renders on two lines instead of collapsing to one.
-
