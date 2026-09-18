@@ -9,7 +9,7 @@
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
     <key>CFBundleIdentifier</key>
-    <string>au.com.telecue.TeleCue</string>
+    <string>com.repasscloud.TeleCue</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
@@ -19,7 +19,7 @@
     <key>CFBundleShortVersionString</key>
     <string>0.1.0</string>
     <key>CFBundleVersion</key>
-    <string>2</string>
+    <string>8</string>
     <key>NSHumanReadableCopyright</key>
     <string>© 2026 Danijel-James Wynyard. All rights reserved.</string>
     <key>LSMinimumSystemVersion</key>

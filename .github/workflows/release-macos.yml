@@ -1,0 +1,158 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    name: Build (${{ matrix.triple }})
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          - arch: arm64
+            triple: aarch64-apple-darwin
+          - arch: x86_64
+            triple: x86_64-apple-darwin
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Validate release version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+
+          PLIST_VERSION=$(
+            plutil \
+              -extract CFBundleShortVersionString raw \
+              src/macos/Resources/Info.plist
+          )
+
+          echo "Git tag:       ${TAG}"
+          echo "Release:       ${VERSION}"
+          echo "Info.plist:    ${PLIST_VERSION}"
+
+          if [[ "${VERSION}" != "${PLIST_VERSION}" ]]; then
+            echo "::error::Tag ${TAG} does not match Info.plist version ${PLIST_VERSION}"
+            exit 1
+          fi
+
+      - name: Run tests
+        run: |
+          swift test --package-path src/macos
+
+      - name: Build release
+        run: |
+          scripts/build-macos-app.sh release --no-bump --arch=${{ matrix.arch }}
+
+      - name: Create release archive
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          VERSION="${GITHUB_REF_NAME#v}"
+          TRIPLE="${{ matrix.triple }}"
+          APP="src/macos/build/${TRIPLE}/TeleCue.app"
+          ZIP="TeleCue-${VERSION}-${TRIPLE}.zip"
+
+          ditto \
+            -c \
+            -k \
+            --sequesterRsrc \
+            --keepParent \
+            "${APP}" \
+            "${ZIP}"
+
+          shasum -a 256 "${ZIP}" > "${ZIP}.sha256"
+
+          mkdir -p dist
+          mv "${ZIP}" "${ZIP}.sha256" dist/
+
+          echo
+          echo "Release artifacts:"
+          ls -lh "dist/${ZIP}" "dist/${ZIP}.sha256"
+
+          echo
+          echo "SHA-256:"
+          cat "dist/${ZIP}.sha256"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.triple }}
+          path: dist/*
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub Release
+    runs-on: ubuntu-latest
+    needs:
+      - build-macos
+    # Add future platform build jobs here (e.g. build-linux, build-windows)
+    # and list them under `needs:` above once they exist.
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: release-*
+          path: dist
+          merge-multiple: true
+
+      - name: Extract changelog section
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          VERSION="${GITHUB_REF_NAME#v}"
+
+          awk -v version="$VERSION" '
+            BEGIN { found = 0 }
+            /^## \[/ {
+              if (found) exit
+              if ($0 ~ "^## \\[" version "\\]") {
+                found = 1
+                next
+              }
+              next
+            }
+            found && /^\[[^]]+\]:/ { exit }
+            found { print }
+          ' CHANGELOG.md > RELEASE_NOTES.md
+
+          # Trim leading/trailing blank lines
+          sed -i -e '/./,$!d' -e ':a' -e '/^\n*$/{$d;N;ba' -e '}' RELEASE_NOTES.md
+
+          if [[ ! -s RELEASE_NOTES.md ]]; then
+            echo "::error::No changelog section found for version ${VERSION}"
+            exit 1
+          fi
+
+          echo "Release notes:"
+          cat RELEASE_NOTES.md
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          ls -lh dist/
+
+          gh release create "${GITHUB_REF_NAME}" \
+            dist/* \
+            --title "TeleCue ${GITHUB_REF_NAME#v}" \
+            --notes-file RELEASE_NOTES.md
