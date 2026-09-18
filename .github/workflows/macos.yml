@@ -10,9 +10,9 @@ permissions:
 
 jobs:
   test-and-build:
-    runs-on: macos-15
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Test
         run: swift test --package-path src/macos
       - name: Build release

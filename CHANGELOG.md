@@ -24,3 +24,5 @@ and the project uses semantic versioning.
 ### Fixed
 
 - Copyright line break in the About panel now renders on two lines instead of collapsing to one.
+
+[0.1.0]: https://github.com/repasscloud/telecue/releases/tag/v0.1.0
