@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 @main
@@ -75,6 +76,14 @@ private struct TeleCueCommands: Commands {
 
             Button("Toggle Presentation Mode") {
                 PrompterWindowController.shared.togglePresentation(model: model)
+            }
+        }
+
+        CommandGroup(replacing: .help) {
+            Button("TeleCue Help") {
+                if let url = URL(string: "https://example.com/telecue/help") {
+                    NSWorkspace.shared.open(url)
+                }
             }
         }
     }
