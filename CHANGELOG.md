@@ -5,6 +5,13 @@ All notable changes to TeleCue will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project uses semantic versioning.
 
+## [0.1.1] - 2026-09-19
+
+### Fixed
+
+- macOS release packaging now code-signs the fully assembled `TeleCue.app` bundle (executable, `Info.plist`, and resources) instead of relying on the stale ad-hoc signature left on the bare executable by `swift build`. This fixes Gatekeeper reporting the Homebrew-installed app as "damaged" (`code has no resources but signature indicates they must be present`).
+- Release workflow now fails the build if `codesign --verify --deep --strict` does not pass, both right after signing and again after extracting the release ZIP, so a malformed `.app` can no longer reach a GitHub Release.
+
 ## [0.1.0] - 2026-09-17
 
 ### Added
@@ -25,4 +32,5 @@ and the project uses semantic versioning.
 
 - Copyright line break in the About panel now renders on two lines instead of collapsing to one.
 
+[0.1.1]: https://github.com/repasscloud/telecue/releases/tag/v0.1.1
 [0.1.0]: https://github.com/repasscloud/telecue/releases/tag/v0.1.0

@@ -86,6 +86,38 @@ jobs:
           echo "SHA-256:"
           cat "dist/${ZIP}.sha256"
 
+      - name: Verify packaged artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          VERSION="${GITHUB_REF_NAME#v}"
+          TRIPLE="${{ matrix.triple }}"
+          ZIP="dist/TeleCue-${VERSION}-${TRIPLE}.zip"
+
+          # Validate the exact bytes that will ship in the GitHub Release /
+          # Homebrew Cask, not the pre-zip working copy: extract to a clean
+          # temp dir and re-run the signature checks against that copy.
+          extract_dir=$(mktemp -d)
+          ditto -x -k "${ZIP}" "${extract_dir}"
+          app_path="${extract_dir}/TeleCue.app"
+
+          echo "Signature details of extracted artifact:"
+          codesign -d --verbose=4 "${app_path}"
+
+          echo
+          echo "Verifying extracted artifact..."
+          codesign \
+            --verify \
+            --deep \
+            --strict \
+            --verbose=4 \
+            "${app_path}"
+
+          spctl --assess --type execute --verbose=4 "${app_path}" || true
+
+          rm -rf "${extract_dir}"
+
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:

@@ -186,6 +186,26 @@ for target_arch in "${archs[@]}"; do
 
   chmod +x "$contents_dir/MacOS/TeleCue"
 
+  # Re-sign the COMPLETE bundle. The executable carries a stale ad-hoc
+  # linker signature from `swift build` that covers only the raw Mach-O;
+  # it does not seal Info.plist or Resources once they're copied in
+  # afterward, which Gatekeeper rejects as damaged. Signing here, after
+  # the bundle is fully assembled, binds Info.plist and seals resources.
+  codesign_identity="${TELECUE_CODESIGN_IDENTITY:--}"
+
+  codesign \
+    --force \
+    --deep \
+    --sign "$codesign_identity" \
+    "$app_dir"
+
+  codesign \
+    --verify \
+    --deep \
+    --strict \
+    --verbose=4 \
+    "$app_dir"
+
   app_paths+=("$app_dir")
 done
 
