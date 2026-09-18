@@ -21,6 +21,7 @@ rm -rf "$app_dir"
 mkdir -p "$contents_dir/MacOS" "$contents_dir/Resources"
 cp "$binary_path/TeleCue" "$contents_dir/MacOS/TeleCue"
 cp "$package_dir/Resources/Info.plist" "$contents_dir/Info.plist"
+cp "$package_dir/Resources/AppIcon.icns" "$contents_dir/Resources/AppIcon.icns"
 chmod +x "$contents_dir/MacOS/TeleCue"
 
 print "$app_dir"
