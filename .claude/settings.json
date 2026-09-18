@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(swift test:*)",
+      "Bash(swift build:*)",
+      "Bash(scripts/build-macos-app.sh:*)",
+      "Bash(open:*)",
+      "Edit",
+      "Read",
+      "Write"
+    ]
+  }
+}

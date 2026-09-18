@@ -1,0 +1,21 @@
+name: macOS
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test
+        run: swift test --package-path src/macos
+      - name: Build release
+        run: swift build -c release --package-path src/macos
+      - name: Package app
+        run: scripts/build-macos-app.sh release

@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+
+# Xcode and SwiftPM
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.swiftpm/
+.build/
+src/macos/build/
+
+# Visual Studio and .NET
+.vs/
+bin/
+obj/
+*.user
+
+# Rust
+target/
+
+# Editors
+*~
+*.swp
+.idea/
+.vscode/
+
