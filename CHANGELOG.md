@@ -20,3 +20,7 @@ and the project uses semantic versioning.
 - Deterministic pacing, settings, model, and file-loading tests.
 - Local `.app` packaging script and macOS continuous integration workflow.
 
+### Fixed
+
+- Copyright line break in the About panel now renders on two lines instead of collapsing to one.
+
