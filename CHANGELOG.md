@@ -19,6 +19,7 @@ and the project uses semantic versioning.
 - macOS keyboard shortcuts and native menu commands.
 - Deterministic pacing, settings, model, and file-loading tests.
 - Local `.app` packaging script and macOS continuous integration workflow.
+- Automatic build-number increment on every `build-macos-app.sh` run, with `--major`, `--minor`, and `--revision` flags to bump the marketing version and reset the build number to 1.
 
 ### Fixed
 
