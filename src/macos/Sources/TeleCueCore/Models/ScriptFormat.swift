@@ -1,10 +1,10 @@
 import Foundation
 
-enum ScriptFormat: Equatable, Sendable {
+public enum ScriptFormat: Equatable, Sendable {
     case plain
     case markdown
 
-    init(fileURL: URL) {
+    public init(fileURL: URL) {
         switch fileURL.pathExtension.lowercased() {
         case "md", "markdown":
             self = .markdown

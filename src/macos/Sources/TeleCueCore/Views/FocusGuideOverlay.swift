@@ -1,10 +1,15 @@
 import SwiftUI
 
-struct FocusGuideOverlay: View {
+public struct FocusGuideOverlay: View {
     let position: Double
     let fontSize: Double
 
-    var body: some View {
+    public init(position: Double, fontSize: Double) {
+        self.position = position
+        self.fontSize = fontSize
+    }
+
+    public var body: some View {
         GeometryReader { proxy in
             let height = proxy.size.height
             let center = height * position

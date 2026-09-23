@@ -1,6 +1,7 @@
+#if os(macOS)
 import AppKit
 import XCTest
-@testable import TeleCue
+@testable import TeleCueCore
 
 final class ScriptRendererTests: XCTestCase {
     func testPlainScriptsAreRenderedLiterally() {
@@ -50,3 +51,4 @@ final class ScriptRendererTests: XCTestCase {
         string.attribute(.paragraphStyle, at: index, effectiveRange: nil) as! NSParagraphStyle
     }
 }
+#endif

@@ -1,5 +1,6 @@
 import AppKit
 import SwiftUI
+import TeleCueCore
 
 struct PrompterTextView: NSViewRepresentable {
     let text: String

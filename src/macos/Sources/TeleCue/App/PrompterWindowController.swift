@@ -1,5 +1,6 @@
 import AppKit
 import SwiftUI
+import TeleCueCore
 
 @MainActor
 final class PrompterWindowController: NSObject, NSWindowDelegate {

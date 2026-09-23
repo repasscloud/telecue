@@ -1,11 +1,27 @@
+#if os(macOS)
 import AppKit
 
-enum ScriptRenderer {
+public typealias PlatformFont = NSFont
+public typealias PlatformColor = NSColor
+#else
+import UIKit
+
+public typealias PlatformFont = UIFont
+public typealias PlatformColor = UIColor
+#endif
+
+public enum ScriptRenderer {
+    #if os(macOS)
     private static let textColor = NSColor(calibratedWhite: 0.96, alpha: 1)
     private static let quoteColor = NSColor(calibratedWhite: 0.8, alpha: 1)
     private static let codeColor = NSColor(calibratedRed: 0.55, green: 0.85, blue: 1, alpha: 1)
+    #else
+    private static let textColor = UIColor(white: 0.96, alpha: 1)
+    private static let quoteColor = UIColor(white: 0.8, alpha: 1)
+    private static let codeColor = UIColor(red: 0.55, green: 0.85, blue: 1, alpha: 1)
+    #endif
 
-    static func render(
+    public static func render(
         _ text: String,
         format: ScriptFormat,
         fontSize: Double,
@@ -14,7 +30,7 @@ enum ScriptRenderer {
         switch format {
         case .plain:
             return NSAttributedString(string: text, attributes: [
-                .font: NSFont.systemFont(ofSize: fontSize, weight: .medium),
+                .font: PlatformFont.systemFont(ofSize: fontSize, weight: .medium),
                 .foregroundColor: textColor,
                 .paragraphStyle: paragraphStyle(lineSpacing: lineSpacing)
             ])
@@ -74,13 +90,19 @@ enum ScriptRenderer {
         }
     }
 
-    private static func font(size: Double, style: ScriptRun.Style) -> NSFont {
+    private static func font(size: Double, style: ScriptRun.Style) -> PlatformFont {
         if style.contains(.code) {
-            return NSFont.monospacedSystemFont(ofSize: size * 0.85, weight: style.contains(.bold) ? .bold : .regular)
+            return PlatformFont.monospacedSystemFont(ofSize: size * 0.85, weight: style.contains(.bold) ? .bold : .regular)
         }
-        let font = NSFont.systemFont(ofSize: size, weight: style.contains(.bold) ? .bold : .medium)
+        let font = PlatformFont.systemFont(ofSize: size, weight: style.contains(.bold) ? .bold : .medium)
         guard style.contains(.italic) else { return font }
+        #if os(macOS)
         return NSFontManager.shared.convert(font, toHaveTrait: .italicFontMask)
+        #else
+        let traits = font.fontDescriptor.symbolicTraits.union(.traitItalic)
+        guard let descriptor = font.fontDescriptor.withSymbolicTraits(traits) else { return font }
+        return UIFont(descriptor: descriptor, size: size)
+        #endif
     }
 
     private static func paragraphStyle(lineSpacing: Double) -> NSMutableParagraphStyle {

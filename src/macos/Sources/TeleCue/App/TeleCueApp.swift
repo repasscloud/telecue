@@ -1,5 +1,6 @@
 import AppKit
 import SwiftUI
+import TeleCueCore
 
 @main
 struct TeleCueApp: App {

@@ -1,11 +1,17 @@
 import SwiftUI
 
-struct ScriptStatusView: View {
+public struct ScriptStatusView: View {
     let wordCount: Int
     let duration: String
     let wordsPerMinute: Int
 
-    var body: some View {
+    public init(wordCount: Int, duration: String, wordsPerMinute: Int) {
+        self.wordCount = wordCount
+        self.duration = duration
+        self.wordsPerMinute = wordsPerMinute
+    }
+
+    public var body: some View {
         Text(statusText)
             .font(.callout)
             .foregroundStyle(.secondary)
