@@ -61,4 +61,28 @@ final class TeleCueModelTests: XCTestCase {
 
         XCTAssertEqual(model.formattedDuration, "1h 0m 0s")
     }
+
+    func testMarkdownFilesAreFormattedAndTextFilesAreNot() throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let markdownURL = directory.appendingPathComponent("script.md")
+        let textURL = directory.appendingPathComponent("script.txt")
+        try Data("# One\n\n**two**".utf8).write(to: markdownURL)
+        try Data("# One\n\n**two**".utf8).write(to: textURL)
+        let model = TeleCueModel(settings: .default, settingsStore: nil)
+
+        model.loadScript(from: markdownURL)
+        XCTAssertEqual(model.scriptFormat, .markdown)
+        XCTAssertEqual(model.wordCount, 2)
+
+        model.loadScript(from: textURL)
+        XCTAssertEqual(model.scriptFormat, .plain)
+        XCTAssertEqual(model.wordCount, 3)
+
+        model.loadScript(from: markdownURL)
+        model.clearScript()
+        XCTAssertEqual(model.scriptFormat, .plain)
+    }
 }

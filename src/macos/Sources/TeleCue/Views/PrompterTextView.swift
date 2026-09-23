@@ -3,6 +3,7 @@ import SwiftUI
 
 struct PrompterTextView: NSViewRepresentable {
     let text: String
+    let format: ScriptFormat
     let fontSize: Double
     let lineSpacing: Double
     let position: Double
@@ -51,17 +52,18 @@ struct PrompterTextView: NSViewRepresentable {
         context.coordinator.beginProgrammaticUpdate()
         defer { context.coordinator.endProgrammaticUpdate() }
 
-        let paragraph = NSMutableParagraphStyle()
-        paragraph.lineSpacing = lineSpacing
-        paragraph.alignment = .center
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: NSFont.systemFont(ofSize: fontSize, weight: .medium),
-            .foregroundColor: NSColor(calibratedWhite: 0.96, alpha: 1),
-            .paragraphStyle: paragraph
-        ]
-        let renderedText = text.isEmpty ? "Paste or open a script in the TeleCue editor." : text
-        let attributedText = NSAttributedString(string: renderedText, attributes: attributes)
-        if textView.attributedString() != attributedText {
+        // updateNSView runs every frame during playback; only re-render when the input changes.
+        let renderKey = RenderKey(text: text, format: format, fontSize: fontSize, lineSpacing: lineSpacing)
+        if context.coordinator.lastRenderKey != renderKey {
+            context.coordinator.lastRenderKey = renderKey
+            let attributedText = text.isEmpty
+                ? ScriptRenderer.render(
+                    "Paste or open a script in the TeleCue editor.",
+                    format: .plain,
+                    fontSize: fontSize,
+                    lineSpacing: lineSpacing
+                )
+                : ScriptRenderer.render(text, format: format, fontSize: fontSize, lineSpacing: lineSpacing)
             textView.textStorage?.setAttributedString(attributedText)
         }
 
@@ -93,9 +95,17 @@ struct PrompterTextView: NSViewRepresentable {
         NotificationCenter.default.removeObserver(coordinator)
     }
 
+    struct RenderKey: Equatable {
+        let text: String
+        let format: ScriptFormat
+        let fontSize: Double
+        let lineSpacing: Double
+    }
+
     @MainActor
     final class Coordinator: NSObject {
         var parent: PrompterTextView
+        var lastRenderKey: RenderKey?
         weak var scrollView: NSScrollView?
         weak var textView: NSTextView?
         private var suppressScrollCallback = false
