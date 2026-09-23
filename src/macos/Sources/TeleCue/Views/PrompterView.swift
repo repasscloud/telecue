@@ -12,6 +12,7 @@ struct PrompterView: View {
             TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: !model.isPlaying)) { context in
                 PrompterTextView(
                     text: model.script,
+                    format: model.scriptFormat,
                     fontSize: model.settings.fontSize,
                     lineSpacing: model.settings.lineSpacing,
                     position: model.scrollPosition,

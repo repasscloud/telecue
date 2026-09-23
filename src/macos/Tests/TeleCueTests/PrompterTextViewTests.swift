@@ -13,6 +13,7 @@ final class PrompterTextViewTests: XCTestCase {
         func makeView(position: Double) -> PrompterTextView {
             PrompterTextView(
                 text: script,
+                format: .plain,
                 fontSize: 42,
                 lineSpacing: 10,
                 position: position,

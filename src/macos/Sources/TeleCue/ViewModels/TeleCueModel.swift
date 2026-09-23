@@ -6,9 +6,18 @@ import Observation
 final class TeleCueModel {
     var script = "" {
         didSet {
-            refreshMetrics(at: Self.currentTimestamp)
+            scriptDidChange()
         }
     }
+
+    private(set) var scriptFormat = ScriptFormat.plain {
+        didSet {
+            scriptDidChange()
+        }
+    }
+
+    /// Cached because Markdown scripts must be parsed to count their words.
+    private(set) var wordCount = 0
 
     private(set) var settings: TeleCueSettings
     private(set) var alertMessage: String?
@@ -28,10 +37,6 @@ final class TeleCueModel {
             contentHeight: 0,
             viewportHeight: 0
         ))
-    }
-
-    var wordCount: Int {
-        ScriptMetrics.wordCount(in: script)
     }
 
     var estimatedDuration: Double {
@@ -58,7 +63,9 @@ final class TeleCueModel {
 
     func loadScript(from url: URL) {
         do {
-            script = try ScriptFileLoader.load(from: url)
+            let text = try ScriptFileLoader.load(from: url)
+            scriptFormat = ScriptFormat(fileURL: url)
+            script = text
             engine.restart()
         } catch {
             alertMessage = error.localizedDescription
@@ -71,6 +78,7 @@ final class TeleCueModel {
 
     func clearScript() {
         script = ""
+        scriptFormat = .plain
         engine.restart()
     }
 
@@ -137,6 +145,11 @@ final class TeleCueModel {
 
     func seek(to position: Double, at timestamp: TimeInterval = TeleCueModel.currentTimestamp) {
         engine.seek(to: position, at: timestamp)
+    }
+
+    private func scriptDidChange() {
+        wordCount = ScriptMetrics.wordCount(in: script, format: scriptFormat)
+        refreshMetrics(at: Self.currentTimestamp)
     }
 
     private func refreshMetrics(at timestamp: TimeInterval) {

@@ -5,6 +5,16 @@ All notable changes to TeleCue will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project uses semantic versioning.
 
+## [Unreleased]
+
+### Added
+
+- Markdown scripts (`.md`, `.markdown`) are now formatted in the prompter: headings are larger and bold, `**bold**` and `*italic*` are styled, lists show bullets or numbers, quotes are italic, and code is shown in a coloured monospaced font (code blocks left-aligned). Tables, diagram code blocks (Mermaid, PlantUML, Graphviz, D2), images, raw HTML, horizontal rules, and YAML front matter are hidden. Line breaks within a paragraph are kept as written. `.txt` scripts are still shown exactly as written.
+
+### Fixed
+
+- Word count and reading-time estimates for Markdown scripts count only the words shown, not Markdown syntax or hidden content.
+
 ## [0.1.1] - 2026-09-19
 
 ### Fixed
