@@ -28,9 +28,8 @@ public struct FocusGuideOverlay: View {
 
                 Rectangle()
                     .fill(Color(red: 0.20, green: 0.76, blue: 0.92).opacity(0.9))
-                    .frame(height: 2)
+                    .frame(width: max(0, proxy.size.width - 60), height: 2)
                     .position(x: proxy.size.width / 2, y: bottomStart)
-                    .padding(.horizontal, 30)
             }
         }
         .allowsHitTesting(false)

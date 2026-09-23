@@ -7,6 +7,14 @@ and the project uses semantic versioning.
 
 ## [Unreleased]
 
+### Added
+
+- A prototype iPhone and iPad app (`src/ios`) built on `TeleCueCore`. It includes a script editor that can open files from Files, a full-screen prompter with WPM-paced scrolling, the focus guide, font size and mirror controls, tap-to-show controls that fade out during playback, drag to reposition, hardware keyboard and page-turner shortcuts, and it keeps the screen awake while prompting.
+
+### Fixed
+
+- The focus guide line is now centred with an even 30-point margin. Previously it started 60 points from the left and ran off the right edge.
+
 ### Changed
 
 - The prompter engine, script model, settings, Markdown parsing, script rendering, and shared SwiftUI controls now live in a platform-neutral `TeleCueCore` library that builds for macOS 14 and iOS 17, in preparation for an iPhone and iPad app. The macOS app is now a thin shell over it; its behaviour is unchanged.
