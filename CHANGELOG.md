@@ -5,7 +5,7 @@ All notable changes to TeleCue will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project uses semantic versioning.
 
-## [Unreleased]
+## [0.2.0] - 2026-09-23
 
 ### Added
 
@@ -42,5 +42,6 @@ and the project uses semantic versioning.
 
 - Copyright line break in the About panel now renders on two lines instead of collapsing to one.
 
+[0.2.0]: https://github.com/repasscloud/telecue/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/repasscloud/telecue/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/repasscloud/telecue/releases/tag/v0.1.0
