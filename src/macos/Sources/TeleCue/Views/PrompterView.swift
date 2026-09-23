@@ -1,4 +1,5 @@
 import SwiftUI
+import TeleCueCore
 
 struct PrompterView: View {
     @Bindable var model: TeleCueModel

@@ -3,28 +3,28 @@ import Observation
 
 @MainActor
 @Observable
-final class TeleCueModel {
-    var script = "" {
+public final class TeleCueModel {
+    public var script = "" {
         didSet {
             scriptDidChange()
         }
     }
 
-    private(set) var scriptFormat = ScriptFormat.plain {
+    public private(set) var scriptFormat = ScriptFormat.plain {
         didSet {
             scriptDidChange()
         }
     }
 
     /// Cached because Markdown scripts must be parsed to count their words.
-    private(set) var wordCount = 0
+    public private(set) var wordCount = 0
 
-    private(set) var settings: TeleCueSettings
-    private(set) var alertMessage: String?
+    public private(set) var settings: TeleCueSettings
+    public private(set) var alertMessage: String?
     private var engine: PrompterEngine
     @ObservationIgnored private let settingsStore: TeleCueSettingsStore?
 
-    init(
+    public init(
         settings: TeleCueSettings? = nil,
         settingsStore: TeleCueSettingsStore? = TeleCueSettingsStore()
     ) {
@@ -39,14 +39,14 @@ final class TeleCueModel {
         ))
     }
 
-    var estimatedDuration: Double {
+    public var estimatedDuration: Double {
         ScriptMetrics.durationSeconds(
             wordCount: wordCount,
             wordsPerMinute: settings.wordsPerMinute
         )
     }
 
-    var formattedDuration: String {
+    public var formattedDuration: String {
         let totalSeconds = Int(estimatedDuration.rounded())
         let hours = totalSeconds / 3_600
         let minutes = totalSeconds % 3_600 / 60
@@ -57,11 +57,11 @@ final class TeleCueModel {
         return "\(minutes)m \(seconds)s"
     }
 
-    var isPlaying: Bool { engine.isPlaying }
-    var scrollPosition: Double { engine.position }
-    var scrollProgress: Double { engine.progress }
+    public var isPlaying: Bool { engine.isPlaying }
+    public var scrollPosition: Double { engine.position }
+    public var scrollProgress: Double { engine.progress }
 
-    func loadScript(from url: URL) {
+    public func loadScript(from url: URL) {
         do {
             let text = try ScriptFileLoader.load(from: url)
             scriptFormat = ScriptFormat(fileURL: url)
@@ -72,53 +72,53 @@ final class TeleCueModel {
         }
     }
 
-    func dismissAlert() {
+    public func dismissAlert() {
         alertMessage = nil
     }
 
-    func clearScript() {
+    public func clearScript() {
         script = ""
         scriptFormat = .plain
         engine.restart()
     }
 
-    func adjustWPM(by delta: Int) {
+    public func adjustWPM(by delta: Int) {
         settings.wordsPerMinute += delta
         commitSettings()
         refreshMetrics(at: Self.currentTimestamp)
     }
 
-    func adjustFontSize(by delta: Double) {
+    public func adjustFontSize(by delta: Double) {
         settings.fontSize += delta
         commitSettings()
     }
 
-    func adjustLineSpacing(by delta: Double) {
+    public func adjustLineSpacing(by delta: Double) {
         settings.lineSpacing += delta
         commitSettings()
     }
 
-    func toggleFocus() {
+    public func toggleFocus() {
         settings.focusEnabled.toggle()
         commitSettings()
     }
 
-    func setFocusPosition(_ position: Double) {
+    public func setFocusPosition(_ position: Double) {
         settings.focusPosition = position
         commitSettings()
     }
 
-    func toggleMirror() {
+    public func toggleMirror() {
         settings.mirrorEnabled.toggle()
         commitSettings()
     }
 
-    func setBorderlessPresentation(_ enabled: Bool) {
+    public func setBorderlessPresentation(_ enabled: Bool) {
         settings.borderlessPresentation = enabled
         commitSettings()
     }
 
-    func updateRenderedMetrics(
+    public func updateRenderedMetrics(
         contentHeight: Double,
         viewportHeight: Double,
         at timestamp: TimeInterval = TeleCueModel.currentTimestamp
@@ -131,19 +131,19 @@ final class TeleCueModel {
         ), at: timestamp)
     }
 
-    func togglePlayback(at timestamp: TimeInterval = TeleCueModel.currentTimestamp) {
+    public func togglePlayback(at timestamp: TimeInterval = TeleCueModel.currentTimestamp) {
         engine.togglePlayback(at: timestamp)
     }
 
-    func tick(at timestamp: TimeInterval = TeleCueModel.currentTimestamp) {
+    public func tick(at timestamp: TimeInterval = TeleCueModel.currentTimestamp) {
         engine.update(at: timestamp)
     }
 
-    func restart() {
+    public func restart() {
         engine.restart()
     }
 
-    func seek(to position: Double, at timestamp: TimeInterval = TeleCueModel.currentTimestamp) {
+    public func seek(to position: Double, at timestamp: TimeInterval = TeleCueModel.currentTimestamp) {
         engine.seek(to: position, at: timestamp)
     }
 
@@ -165,7 +165,9 @@ final class TeleCueModel {
         settingsStore?.save(settings)
     }
 
-    nonisolated private static var currentTimestamp: TimeInterval {
+    /// Referenced from public default arguments, so it must be visible to inlinable code.
+    @usableFromInline
+    nonisolated static var currentTimestamp: TimeInterval {
         ProcessInfo.processInfo.systemUptime
     }
 }

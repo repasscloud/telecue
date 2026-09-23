@@ -1,5 +1,6 @@
 import AppKit
 import UniformTypeIdentifiers
+import TeleCueCore
 
 @MainActor
 enum ScriptOpenPanel {

@@ -1,9 +1,13 @@
 import SwiftUI
 
-struct WPMControl: View {
+public struct WPMControl: View {
     @Bindable var model: TeleCueModel
 
-    var body: some View {
+    public init(model: TeleCueModel) {
+        self.model = model
+    }
+
+    public var body: some View {
         HStack(spacing: 6) {
             Button {
                 model.adjustWPM(by: -5)

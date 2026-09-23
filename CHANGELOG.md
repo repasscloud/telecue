@@ -5,6 +5,12 @@ All notable changes to TeleCue will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project uses semantic versioning.
 
+## [Unreleased]
+
+### Changed
+
+- The prompter engine, script model, settings, Markdown parsing, script rendering, and shared SwiftUI controls now live in a platform-neutral `TeleCueCore` library that builds for macOS 14 and iOS 17, in preparation for an iPhone and iPad app. The macOS app is now a thin shell over it; its behaviour is unchanged.
+
 ## [0.2.0] - 2026-09-23
 
 ### Added

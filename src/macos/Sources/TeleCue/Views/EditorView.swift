@@ -1,4 +1,5 @@
 import SwiftUI
+import TeleCueCore
 
 struct EditorView: View {
     @Bindable var model: TeleCueModel

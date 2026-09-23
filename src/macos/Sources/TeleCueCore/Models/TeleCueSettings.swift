@@ -1,15 +1,15 @@
 import Foundation
 
-struct TeleCueSettings: Codable, Equatable, Sendable {
-    var wordsPerMinute: Int
-    var fontSize: Double
-    var lineSpacing: Double
-    var focusEnabled: Bool
-    var focusPosition: Double
-    var mirrorEnabled: Bool
-    var borderlessPresentation: Bool
+public struct TeleCueSettings: Codable, Equatable, Sendable {
+    public var wordsPerMinute: Int
+    public var fontSize: Double
+    public var lineSpacing: Double
+    public var focusEnabled: Bool
+    public var focusPosition: Double
+    public var mirrorEnabled: Bool
+    public var borderlessPresentation: Bool
 
-    static let `default` = TeleCueSettings(
+    public static let `default` = TeleCueSettings(
         wordsPerMinute: 150,
         fontSize: 42,
         lineSpacing: 10,
@@ -19,7 +19,7 @@ struct TeleCueSettings: Codable, Equatable, Sendable {
         borderlessPresentation: false
     )
 
-    var normalized: TeleCueSettings {
+    public var normalized: TeleCueSettings {
         var copy = self
         copy.wordsPerMinute = min(250, max(80, nearestStep(wordsPerMinute, step: 5)))
         copy.fontSize = min(96, max(24, nearestStep(fontSize, step: 2)))
@@ -37,15 +37,15 @@ struct TeleCueSettings: Codable, Equatable, Sendable {
     }
 }
 
-struct TeleCueSettingsStore {
+public struct TeleCueSettingsStore {
     private let defaults: UserDefaults
     private let key = "telecue.settings.v1"
 
-    init(defaults: UserDefaults = .standard) {
+    public init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
     }
 
-    func load() -> TeleCueSettings {
+    public func load() -> TeleCueSettings {
         guard let data = defaults.data(forKey: key),
               let settings = try? JSONDecoder().decode(TeleCueSettings.self, from: data) else {
             return .default
@@ -53,7 +53,7 @@ struct TeleCueSettingsStore {
         return settings.normalized
     }
 
-    func save(_ settings: TeleCueSettings) {
+    public func save(_ settings: TeleCueSettings) {
         guard let data = try? JSONEncoder().encode(settings.normalized) else { return }
         defaults.set(data, forKey: key)
     }

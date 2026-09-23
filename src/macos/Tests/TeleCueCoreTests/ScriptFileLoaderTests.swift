@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import TeleCue
+@testable import TeleCueCore
 
 final class ScriptFileLoaderTests: XCTestCase {
     private var temporaryDirectory: URL!

@@ -15,6 +15,9 @@ jobs:
       - uses: actions/checkout@v7
       - name: Test
         run: swift test --package-path src/macos
+      - name: Build shared core for iOS
+        working-directory: src/macos
+        run: xcodebuild -scheme TeleCueCore -destination 'generic/platform=iOS Simulator' build
       - name: Build release
         run: swift build -c release --package-path src/macos
       - name: Package app

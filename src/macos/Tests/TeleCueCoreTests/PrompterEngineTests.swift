@@ -1,5 +1,5 @@
 import XCTest
-@testable import TeleCue
+@testable import TeleCueCore
 
 final class PrompterEngineTests: XCTestCase {
     func testMetricsDeriveDurationDistanceAndVelocity() {
