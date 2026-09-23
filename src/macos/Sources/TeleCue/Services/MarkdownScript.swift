@@ -18,7 +18,7 @@ enum MarkdownScript {
     }
 
     static func spokenText(from markdown: String) -> String {
-        blocks(from: markdown).map(\.text).joined(separator: "\n")
+        blocks(from: markdown).map(\.spokenText).joined(separator: "\n")
     }
 
     private static func appendBlocks(
@@ -66,7 +66,7 @@ enum MarkdownScript {
         var needsMarker = true
         for child in item.children {
             if needsMarker, let paragraph = child as? Paragraph {
-                blocks.append(ScriptBlock(kind: kind, runs: [ScriptRun(marker)] + runs(for: paragraph)))
+                blocks.append(ScriptBlock(kind: kind, runs: [ScriptRun(marker, style: .marker)] + runs(for: paragraph)))
                 needsMarker = false
             } else {
                 appendBlocks(for: child, kind: kind, to: &blocks)

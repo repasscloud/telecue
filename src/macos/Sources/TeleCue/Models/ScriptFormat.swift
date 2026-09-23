@@ -21,6 +21,8 @@ struct ScriptRun: Equatable, Sendable {
         static let bold = Style(rawValue: 1 << 0)
         static let italic = Style(rawValue: 1 << 1)
         static let code = Style(rawValue: 1 << 2)
+        /// Shown on screen but not spoken, such as list bullets and numbers.
+        static let marker = Style(rawValue: 1 << 3)
     }
 
     var text: String
@@ -45,5 +47,9 @@ struct ScriptBlock: Equatable, Sendable {
 
     var text: String {
         runs.map(\.text).joined()
+    }
+
+    var spokenText: String {
+        runs.filter { !$0.style.contains(.marker) }.map(\.text).joined()
     }
 }

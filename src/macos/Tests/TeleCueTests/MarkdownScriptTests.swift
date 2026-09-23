@@ -121,6 +121,18 @@ final class MarkdownScriptTests: XCTestCase {
         XCTAssertEqual(ScriptMetrics.wordCount(in: "# Hello there", format: .plain), 3)
     }
 
+    func testWordCountIgnoresListMarkers() {
+        let markdown = """
+        - hello
+        - there
+
+        1. one
+        2. two
+        """
+
+        XCTAssertEqual(ScriptMetrics.wordCount(in: markdown, format: .markdown), 4)
+    }
+
     func testFormatIsChosenFromFileExtension() {
         XCTAssertEqual(ScriptFormat(fileURL: URL(fileURLWithPath: "/a/script.md")), .markdown)
         XCTAssertEqual(ScriptFormat(fileURL: URL(fileURLWithPath: "/a/script.MARKDOWN")), .markdown)

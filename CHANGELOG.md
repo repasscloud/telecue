@@ -13,7 +13,7 @@ and the project uses semantic versioning.
 
 ### Fixed
 
-- Word count and reading-time estimates for Markdown scripts count only the words shown, not Markdown syntax or hidden content.
+- Word count and reading-time estimates for Markdown scripts count only the words spoken, not Markdown syntax, list bullets and numbers, or hidden content.
 
 ## [0.1.1] - 2026-09-19
 
