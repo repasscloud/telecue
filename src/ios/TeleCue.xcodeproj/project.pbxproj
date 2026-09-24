@@ -11,14 +11,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		7E1C0000000000000000002F /* PBXContainerItemProxy */ = {
+		7E1C00000000000000000018 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7E1C00000000000000000001 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 7E1C00000000000000000010;
 			remoteInfo = TeleCueiOS;
 		};
-		7E1C00000000000000000018 /* PBXContainerItemProxy */ = {
+		7E1C0000000000000000002F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7E1C00000000000000000001 /* Project object */;
 			proxyType = 1;
