@@ -22,3 +22,15 @@ jobs:
         run: swift build -c release --package-path src/macos
       - name: Package app
         run: scripts/build-macos-app.sh release
+
+  ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build iOS app and tests
+        run: >
+          xcodebuild build-for-testing
+          -project src/ios/TeleCue.xcodeproj
+          -scheme TeleCue
+          -destination 'generic/platform=iOS Simulator'
+          CODE_SIGNING_ALLOWED=NO

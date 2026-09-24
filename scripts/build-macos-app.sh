@@ -212,3 +212,7 @@ done
 for app_dir in "${app_paths[@]}"; do
   print "$app_dir"
 done
+
+git add "${repo_dir}/src/macos/Resources/Info.plist"
+git commit -m 'Update Info.plist'
+echo "Updated Info.plist added to git."

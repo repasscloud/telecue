@@ -31,6 +31,7 @@ Pre-built releases are also available from the repository's **Releases** page. D
 | Platform | Status | Native stack |
 | --- | --- | --- |
 | macOS 14 or later | MVP implemented | Swift, SwiftUI, AppKit |
+| iOS and iPadOS 17 or later | Prototype ([details](src/ios/README.md)) | Swift, SwiftUI, UIKit |
 | Windows | Planned | C#, .NET, WinUI 3 |
 | Linux | Planned | Rust, GTK4 |
 
@@ -112,7 +113,8 @@ Option-Up Arrow and Option-Down Arrow also change WPM from the editor window.
 ├── docs/                    design and implementation notes
 ├── scripts/                 local build and packaging scripts
 └── src/
-    ├── macos/               working SwiftUI/AppKit application and tests
+    ├── macos/               shared TeleCueCore library and the SwiftUI/AppKit macOS app
+    ├── ios/                 prototype SwiftUI/UIKit iPhone and iPad app
     ├── windows/             planned WinUI 3 implementation
     └── linux/               planned GTK4 implementation
 ```
